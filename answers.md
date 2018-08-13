@@ -89,3 +89,49 @@ sudo service datadog-agent restart
 
 
 ![enter image description here](https://s3.eu-west-1.amazonaws.com/marouane/datadog-screenshot/Screen%20Shot%202018-08-08%20at%2017.36.57.png?response-content-disposition=inline&X-Amz-Security-Token=AgoGb3JpZ2luEAkaDGV1LWNlbnRyYWwtMSKAAhS2jf2Dl7tHi78yWig86mSfeWXVrdzeCn%2bwvNssGSsFFuIDt65q0KPHVctdceb%2bgbgHvE0xLSg1XcPTteIqKdvdR8N6BEHrLPfZKFbCbrAlh3c8OSE8ri%2bBst5uhKidZbFlUBYJucwRZskm8m/5tvCNTZ36oev1fjjKXDuaXLFr6VTlZfpdGG6YPQiDkfSdfcOqJU7EzNKYBxdHqgw3kXjhTfDxnPYcAiM3FIK5MOxRF64%2brgZ3Fdy9CWJMagBtsNags4ojyphGW08eq0KEp8obYD0h/o8sPU/Bgdau2NI%2biQtScpLklldFobYMVucEpWm3AhUDGw0ocpKFdcTd/Jcq7AII7///////////ARABGgwyOTk1MjIwNTQ2OTgiDMXzAcwbjdjmowmYgSrAAhcbU3pmRtisjJmHevBe9j0S4CpxZOjYvoLz54G1tgcKab%2bRvh4AvpQH8gEjyuupeK65Y0vbdpPUPreD0IoCDrxKOabr2rxeFPCvpiUbqXEZ93QFYh/tp06Tf%2bfS26vVv65yCq1J6CDbI3fCzhJLR%2bC0fmZRtn2kaoF0/9jVgU7FwQd1JIbZbtOReystVYOy7eplCQo5Bztuuj7Foc%2bt/ChMuJw9FVesBPubpt2HbL1aUhW2zcpc1F7QK6dIYNIQl3NKmsbZqmTubSLXmcMr7zsSdLnNRXeXkgJ9COvbm1jZW0eC1zzPJMWTAh8vcxU2PgcjRfg4Mqo2ppz35n1qrNqlox0muzdPVTbQDafC27PIrw0xC6MejWlUY97rVWobrsnq3Lx8%2bSBZyl7MOgVa0JRiHDyvITKGVYcg6rCKvzt4MNfeq9sF&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20180808T153853Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAULPHH3IVDQYN7FMT/20180808/eu-west-1/s3/aws4_request&X-Amz-Signature=6e62a06a249181aef68fa088a15b2ab1eb431de580d7f9aa8b40a532aa886118)
+
+# Monitoring Data
+
+![enter image description here](/screenshots/monitorgraph.png)
+![enter image description here](/screenshots/notificationtext.png)
+![enter image description here](/screenshots/notificationtext.png)
+![enter image description here](/screenshots/weeklydowntime.png)
+![enter image description here](/screenshots/emailweekly.png)
+![enter image description here](/screenshots/weekendowntime.png)
+![enter image description here](/screenshots/emailweekend.png)
+
+
+
+# Collecting APM Data
+
+The APM Agent (also known as Trace Agent) is shipped by default with the Agent 6 in the Linux it will just need to enable it by editing the file `/etc/datadog-agent/datadog.yaml`:
+
+```yaml
+apm_config:
+  enabled: true
+  env: test  #trace tag
+````
+Installin datadog trace library:
+
+```bash
+pip install ddtrace
+````
+Edit the Flask app by adding: 
+
+```python
+from ddtrace import tracer
+from ddtrace.contrib.flask import TraceMiddleware
+```
+
+And create the tracerobject:
+
+```python
+traced_app = TraceMiddleware(app, tracer, service="my-flask-app", distributed_tracing=False)
+```
+![enter image description here](/screenshots/FlaskAPM.png)
+![enter image description here](/screenshots/Flaskapp.png)
+![enter image description here](/screenshots/APMservice.png)
+
+
+https://app.datadoghq.com/screen/409257/marouanes-screenboard-13-aug-2018-1623?page=0&is_auto=false&from_ts=1534166700000&to_ts=1534170300000&live=true
+
